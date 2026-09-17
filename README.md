@@ -7,8 +7,9 @@ Bypass the time-consuming `subread-buildindex` step (which typically takes ~1 ho
 * **Assembly:** GRCh38 / hg38 (Primary Assembly)
 * **Source:** [Ensembl GRCh38 Release DNA Primary Assembly](https://ftp.ensembl.org/pub/current_fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz)
 * **Parameters:** Subread defaults (`indexSplit=TRUE` for 8GB RAM footprint compatibility)
-* **Archive Size:** ~1.45 GB (Highly compressed)
-* **Estimated Download Time:** ~38 seconds (via Pixeldrain high-speed CDN)
+* **Archive Size:** ~4.7 GB (Highly compressed)
+* **Estimated Download Time:** ~2-3 minutes (via Pixeldrain high-speed CDN, depending on your connection)
+* **SHA256 Checksum:** `f9d90ba5dd7c207455bd80e752ce9c2c06a6f9faa0a1e7270c8742b8eb3d1b4d`
 
 ## Quick Start
 
@@ -23,16 +24,23 @@ cd human-grch38-subread-index
 bash download_index.sh
 ```
 
+> **Note:** after the script finishes, it moves the extracted `subread-index/` folder one level up and deletes the cloned repo folder, so you're left with a clean `./subread-index/` directory (no repo files) in the location where you ran `git clone`.
+
 ### Option B: Manual Setup
 If you prefer to handle it manually:
 
 ```bash
-# 1. Download the 1.45GB index from Pixeldrain
-wget https://pixeldrain.com/u/izMm21KJ -O indice_subread.tar.gz
+# 1. Download the 4.7GB index from Pixeldrain
+wget https://pixeldrain.com/u/d2WwvJGs -O subread-index-grch38.tar.gz
 
-# 2. Extract the files
-tar -xzvf indice_subread.tar.gz
+# 2. (Optional but recommended) Verify the archive's integrity
+echo "f9d90ba5dd7c207455bd80e752ce9c2c06a6f9faa0a1e7270c8742b8eb3d1b4d  subread-index-grch38.tar.gz" | sha256sum -c -
 
-# 3. Run your alignment using the index prefix
-subread-align -i ./indice_subread -r reads_1.fastq -R reads_2.fastq -o aligned_output.bam
+# 3. Extract the files (use pigz piped into tar if you have it installed, it's faster)
+pigz -dc subread-index-grch38.tar.gz | tar -xvf -
+# or, without pigz:
+# tar -xzvf subread-index-grch38.tar.gz
+
+# 4. Run your alignment using the index prefix
+subread-align -i ./subread-index/grch38-index -r reads_1.fastq -R reads_2.fastq -o aligned_output.bam
 ```
