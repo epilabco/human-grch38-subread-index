@@ -1,6 +1,6 @@
 # Pre-built Subread Genome Index (Human GRCh38)
 
-Bypass the time-consuming `subread-buildindex` step (which typically takes ~1 hour). This repository provides a shell script to instantly download and deploy a pre-built Subread index for the human genome in under a minute.
+Get straight to read alignment with Subread. This repository provides a shell script to instantly download (high-speed CDN) and deploy a pre-built Subread index for the human genome, skipping the genome download and `subread-buildindex` step, going from ~81 minutes to ~3 minutes (~27x faster) before you're ready to run `subread-align` or `subjunc`. Especially useful for synchronous bioinformatics workshops (no one stuck waiting or falling behind), or simply to save time and skip transferring large genome files between machines.
 
 ## Index Specifications
 * **Organism:** *Homo sapiens* (Human)
